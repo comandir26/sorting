@@ -19,11 +19,10 @@ namespace my_sort {
 
 	template<typename T>
 	struct Comp {
-		inline static size_t copy = 0;
-		inline static size_t comparison = 0;
+		size_t copy = 0;
+		size_t comparison = 0;
 		T value_type;
 		Comp(T& value):value_type(value) {}
-		
 		bool less(T& l, T& r) {
 			comparison++;
 			return l < r;
@@ -39,6 +38,13 @@ namespace my_sort {
 			r = temp;;
 		}
 	};
+
+	template<typename T>
+	void swp(T& l, T& r) {
+		T temp = l;
+		l = r;
+		r = temp;;
+	}
 
 	template<typename T>
 	ostream& operator<<(ostream& os, vector<T>& data) {
@@ -59,18 +65,14 @@ namespace my_sort {
 	template<typename ForwardIterator>
 	stats bubble_sort(ForwardIterator begin, ForwardIterator end) {
 		Comp comp(*begin);
-		//size_t copy_count = 0;
-		//size_t comparison_count = 0;
 		ForwardIterator fix_begin = begin;
 		for (size_t i = 0; begin != end; begin++, i++)
 		{
 			bool is_sorted = true;
 			for (ForwardIterator j = fix_begin; j != end - (i + 1); j++)
 			{
-				//++comparison_count;
 				if (comp.more(*j, *(j + 1))) {
 					is_sorted = false;
-					//++copy_count;
 					comp.swap(*j, *(j + 1));
 				}
 			}
@@ -79,34 +81,30 @@ namespace my_sort {
 		return stats{ comp.comparison, comp.copy};
 	}	
 	
-	template<typename ForwardIterator>
-	void insert_sort(ForwardIterator begin, ForwardIterator end, size_t& copy_count, size_t& comparison_count) {
+	template<typename ForwardIterator, typename T>
+	void insert_sort(ForwardIterator begin, ForwardIterator end, Comp<T>& comp) {
 		for (ForwardIterator it = begin + 1; it!=end; ++it) {
-			for (ForwardIterator init = it; init != begin && *init < *(init - 1); --init)
+			for (ForwardIterator init = it; init != begin && comp.less(*init, *(init-1)); --init)
 			{
-				swap(*init, *(init - 1));
+				comp.swap(*init, *(init - 1));
 			}
 		}
 	}
 
-	template<typename ForwardIterator>
-	stats quick_sort(ForwardIterator begin, ForwardIterator end, size_t& copy_count, size_t& comparison_count) {
+	template<typename ForwardIterator, typename T>
+	void qs_vector(ForwardIterator begin, ForwardIterator end, Comp<T>& comp) {
 		auto sup_elem = begin;
 		auto i = begin + 1;
 		auto j = end - 1;
-		while (i < j || ((i == j) && (*j < *sup_elem)) ) {
-			++comparison_count;
-			while (*i < *sup_elem && i != end - 1) {				
-				++comparison_count;
+		while (i < j || ((i == j) && (*j < *sup_elem))) {		
+			while (comp.less(*i, *sup_elem) && i != end - 1) {
 				++i;
 			}
-			++comparison_count;
-			while (*j > *sup_elem) {
+			while (comp.more(*j, *sup_elem)) {
 				--j;
 			}
 			if (i < j) {
-				++copy_count;
-				swap(*i, *j);
+				comp.swap(*i, *j);
 				--j;
 			}
 			++i;
@@ -115,11 +113,8 @@ namespace my_sort {
 			}
 			cout << '\n';
 		}
+		if (comp.more(*sup_elem, *j)) comp.swap(*j, *sup_elem);
 
-		++copy_count;
-
-		if(*sup_elem > *j) swap(*j, *sup_elem);
-		
 		for (auto it = begin; it != end; it++) {
 			cout << *it << ' ';
 		}
@@ -131,24 +126,61 @@ namespace my_sort {
 
 		cout << "l: " << left_size << " " << "r: " << right_size << '\n';
 
-		if (left_size > 1) quick_sort(begin, begin + left_size, copy_count, comparison_count);
-
-		if (right_size > 1) quick_sort(end - right_size, end, copy_count, comparison_count);
-		
-		/*
 		if (left_size > 5) {
-			quick_sort(begin, begin + left_size, copy_count, comparison_count);
+			qs_vector(begin, begin + left_size, comp);
 		}
 		else if (left_size > 1) {
-			insert_sort( vector<T>(data.begin(), data.begin() + left_size) );
+			insert_sort(begin, begin + left_size, comp);
 		}
 		if (right_size > 5) {
-			quick_sort( vector<T>(data.begin() + left_size + 1, data.end()) );
+			qs_vector(end - right_size, end, comp);
 		}
 		else if (right_size > 1) {
-			insert_sort(vector<T>(data.begin() + left_size + 1, data.end()) );
+			insert_sort(end - right_size, end, comp);
 		}
-		*/
-		return stats{ comparison_count, copy_count };
+	}
+
+	template<typename ForwardIterator>
+	stats quick_sort(ForwardIterator begin, ForwardIterator end) {
+		Comp comp(*begin);
+		qs_vector(begin, end, comp);
+		return stats{ comp.comparison, comp.copy };
+	}
+
+	template<typename ForwardIterator, typename T>
+	void max_heap(ForwardIterator begin, size_t size, ForwardIterator index, Comp<T>& comp) {
+		if ((index - begin) * 2 + 1 >= size) return;
+		ForwardIterator largest = index;
+		ForwardIterator left = begin + (2 * (index - begin) + 1);
+		ForwardIterator right = begin + (2 * (index - begin) + 2);
+
+		if (left < (begin + size) && comp.more(*left, *largest)) {
+			largest = left;
+		}
+
+		if (right < (begin + size) && comp.more(*right, *largest)) {
+			largest = right;
+		}
+
+		if (largest != index) {
+			comp.swap(*index, *largest);
+			max_heap(begin, size, largest, comp);
+		}	
+	}
+	
+	template<typename ForwardIterator>
+	stats pyramidal_sort(ForwardIterator begin, ForwardIterator end) {
+		Comp comp(*begin);
+		int size = end - begin;
+		for (int i = size/2 - 1; i >= 0 ; --i)
+		{
+			max_heap(begin, size, begin + i, comp);
+		}
+		for (int i = size - 1; i >= 0; --i)
+		{
+			comp.swap(*begin, *(begin + i));
+			max_heap(begin, i, begin, comp);
+		}
+		return stats{ comp.comparison, comp.copy };
 	}
 }
