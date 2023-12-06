@@ -1,21 +1,29 @@
 #pragma once
 #include <vector>
 #include <iostream>
-using std::vector, std::ostream, std::cout;
+#include <string>
+#include <stack>
+using std::vector, std::ostream, std::cout, std::string, std::stack;
 
 namespace my_sort {
+	struct Player {
+		string name;
+		int g_balls;
+
+		Player(string name, int balls) : name(name), g_balls(balls) {}
+
+		bool operator<(Player& rhs) {
+			return g_balls < rhs.g_balls;
+		}
+		bool operator>(Player& rhs) {
+			return g_balls > rhs.g_balls;
+		}
+	};
+
 	struct stats {
 		size_t comparison_count = 0;
 		size_t copy_count = 0;
 	};
-
-	/*
-	template<typename T>
-	void swap(T& l, T& r) {
-		T temp = l;
-		l = r;
-		r = temp;
-	}*/
 
 	template<typename T>
 	struct Comp {
@@ -40,25 +48,26 @@ namespace my_sort {
 	};
 
 	template<typename T>
-	void swp(T& l, T& r) {
-		T temp = l;
-		l = r;
-		r = temp;;
-	}
-
-	template<typename T>
 	ostream& operator<<(ostream& os, vector<T>& data) {
 		for (size_t i = 0; i < data.size(); i++)
 		{
+			if (i != 0 && i % 10 == 0) {
+				cout << '\n';
+			}
 			os << data[i] << ' ';
 		}
 		os << '\n';
 		return os;
 	}
 
-	ostream& operator<<(ostream& os, stats st) {
+	ostream& operator<<(ostream& os, stats& st) {
 		os << "Number of comparisons: " << st.comparison_count << '\n';
 		os << "Number of copies: " << st.copy_count << '\n';
+		return os;
+	}
+
+	ostream& operator<<(ostream& os, Player& p) {
+		os << p.name << ", " << p.g_balls << '\n';
 		return os;
 	}
 
@@ -80,72 +89,6 @@ namespace my_sort {
 		}
 		return stats{ comp.comparison, comp.copy};
 	}	
-	
-	template<typename ForwardIterator, typename T>
-	void insert_sort(ForwardIterator begin, ForwardIterator end, Comp<T>& comp) {
-		for (ForwardIterator it = begin + 1; it!=end; ++it) {
-			for (ForwardIterator init = it; init != begin && comp.less(*init, *(init-1)); --init)
-			{
-				comp.swap(*init, *(init - 1));
-			}
-		}
-	}
-
-	template<typename ForwardIterator, typename T>
-	void qs_vector(ForwardIterator begin, ForwardIterator end, Comp<T>& comp) {
-		auto sup_elem = begin;
-		auto i = begin + 1;
-		auto j = end - 1;
-		while (i < j || ((i == j) && (*j < *sup_elem))) {		
-			while (comp.less(*i, *sup_elem) && i != end - 1) {
-				++i;
-			}
-			while (comp.more(*j, *sup_elem)) {
-				--j;
-			}
-			if (i < j) {
-				comp.swap(*i, *j);
-				--j;
-			}
-			++i;
-			for (auto it = begin; it != end; it++) {
-				cout << *it << ' ';
-			}
-			cout << '\n';
-		}
-		if (comp.more(*sup_elem, *j)) comp.swap(*j, *sup_elem);
-
-		for (auto it = begin; it != end; it++) {
-			cout << *it << ' ';
-		}
-		cout << '\n';
-
-		int left_size = j - begin;
-
-		int right_size = end - begin - left_size - 1;
-
-		cout << "l: " << left_size << " " << "r: " << right_size << '\n';
-
-		if (left_size > 5) {
-			qs_vector(begin, begin + left_size, comp);
-		}
-		else if (left_size > 1) {
-			insert_sort(begin, begin + left_size, comp);
-		}
-		if (right_size > 5) {
-			qs_vector(end - right_size, end, comp);
-		}
-		else if (right_size > 1) {
-			insert_sort(end - right_size, end, comp);
-		}
-	}
-
-	template<typename ForwardIterator>
-	stats quick_sort(ForwardIterator begin, ForwardIterator end) {
-		Comp comp(*begin);
-		qs_vector(begin, end, comp);
-		return stats{ comp.comparison, comp.copy };
-	}
 
 	template<typename ForwardIterator, typename T>
 	void max_heap(ForwardIterator begin, size_t size, ForwardIterator index, Comp<T>& comp) {
@@ -153,7 +96,6 @@ namespace my_sort {
 		ForwardIterator largest = index;
 		ForwardIterator left = begin + (2 * (index - begin) + 1);
 		ForwardIterator right = begin + (2 * (index - begin) + 2);
-
 		if (left < (begin + size) && comp.more(*left, *largest)) {
 			largest = left;
 		}
@@ -161,7 +103,6 @@ namespace my_sort {
 		if (right < (begin + size) && comp.more(*right, *largest)) {
 			largest = right;
 		}
-
 		if (largest != index) {
 			comp.swap(*index, *largest);
 			max_heap(begin, size, largest, comp);
@@ -182,5 +123,44 @@ namespace my_sort {
 			max_heap(begin, i, begin, comp);
 		}
 		return stats{ comp.comparison, comp.copy };
+	}
+
+	template<typename ForwardIterator, typename T>
+	ForwardIterator pivot(ForwardIterator begin, ForwardIterator end, Comp<T>& comp) {
+		ForwardIterator pivot = begin;
+		ForwardIterator i = begin;
+		for (auto j = begin + 1; j <= end - 1; j++) {
+			if (comp.less(*j, *pivot)) {
+				i++;
+				comp.swap(*i, *j);
+			}
+		}
+		comp.swap(*pivot, *i);
+		return i;
+	}
+
+	template<typename ForwardIterator>
+	stats quick_sort(ForwardIterator begin, ForwardIterator end) {
+		Comp comp(*begin);
+		stack<ForwardIterator> s;
+		ForwardIterator last_elem = end - 1;
+		s.push(begin);
+		s.push(last_elem);
+		while (!s.empty()) {
+			last_elem = s.top();
+			s.pop();
+			begin = s.top();
+			s.pop();
+			ForwardIterator pi = pivot(begin, end, comp);
+			if (pi!= begin && pi - 1 > begin ) {
+				s.push(begin);
+				s.push(pi - 1);
+			}
+			if (pi + 1 < last_elem) {
+				s.push(pi + 1);
+				s.push(last_elem);
+			}
+		}
+		return stats{comp.comparison, comp.copy};
 	}
 }

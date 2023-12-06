@@ -1,0 +1,101 @@
+Random:
+
+size: 1000
+comparisons: 16828.7
+copies: 9080
+
+size: 2000
+comparisons: 37729.7
+copies: 20154
+
+size: 3000
+comparisons: 60241.7
+copies: 32083.7
+
+size: 5000
+comparisons: 107668
+copies: 57108.7
+
+size: 10000
+comparisons: 235369
+copies: 124176
+
+size: 25000
+comparisons: 654816
+copies: 343644
+
+size: 50000
+comparisons: 1.40982e+06
+copies: 737525
+
+size: 100000
+comparisons: 3.01954e+06
+copies: 1.57483e+06
+
+Sorted:
+
+size: 1000
+comparisons: 17583
+copies: 9709
+
+size: 2000
+comparisons: 39159
+copies: 21301
+
+size: 3000
+comparisons: 62875
+copies: 34253
+
+size: 5000
+comparisons: 112126
+copies: 60933
+
+size: 10000
+comparisons: 244460
+copies: 131957
+
+size: 25000
+comparisons: 677688
+copies: 361455
+
+size: 50000
+comparisons: 1455438
+copies: 773305
+
+size: 100000
+comparisons: 3112517
+copies: 1650855
+
+RevSorted:
+
+size: 1000
+comparisons: 15965
+copies: 8317
+
+size: 2000
+comparisons: 35964
+copies: 18709
+
+size: 3000
+comparisons: 57537
+copies: 29751
+
+size: 5000
+comparisons: 103227
+copies: 53437
+
+size: 10000
+comparisons: 226682
+copies: 116697
+
+size: 25000
+comparisons: 633719
+copies: 326587
+
+size: 50000
+comparisons: 1366047
+copies: 698893
+
+size: 100000
+comparisons: 2926640
+copies: 1497435

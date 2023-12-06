@@ -1,0 +1,101 @@
+Random:
+
+size: 1000
+comparisons: 
+copies: 
+
+size: 2000
+comparisons: 
+copies: 
+
+size: 3000
+comparisons: 
+copies: 
+
+size: 5000
+comparisons: 
+copies: 
+
+size: 10000
+comparisons: 
+copies: 
+
+size: 25000
+comparisons: 
+copies: 
+
+size: 50000
+comparisons: 
+copies:
+
+size: 100000
+comparisons: 
+copies: 
+
+Sorted:
+
+size: 1000
+comparisons: 
+copies: 
+
+size: 2000
+comparisons: 
+copies: 
+
+size: 3000
+comparisons: 
+copies: 
+
+size: 5000
+comparisons: 
+copies: 
+
+size: 10000
+comparisons: 
+copies: 
+
+size: 25000
+comparisons: 
+copies: 
+
+size: 50000
+comparisons: 
+copies: 
+
+size: 100000
+comparisons: 
+copies: 
+
+RevSorted:
+
+size: 1000
+comparisons: 
+copies: 
+
+size: 2000
+comparisons: 
+copies: 
+
+size: 3000
+comparisons: 
+copies: 
+
+size: 5000
+comparisons: 
+copies: 
+
+size: 10000
+comparisons: 
+copies: 
+
+size: 25000
+comparisons: 
+copies: 
+
+size: 50000
+comparisons: 
+copies: 
+
+size: 100000
+comparisons: 
+copies: 
