@@ -6,7 +6,7 @@
 using namespace my_sort;
 using std::cout, std::string;
 
-
+/*
 TEST(BubbleSort, type_int) {
 	vector<int> data{ 2, 44, 12, 18, 33, 65, 35, 87, 48, 90, 32, 29, 14, 75,
 						69, 19, 38, 58, 63, 0, 19, 71, 74, 44 };
@@ -32,7 +32,6 @@ TEST(BubbleSort, type_player) {
 	cout << st;
 	cout << data;
 }
-
 
 TEST(QuickSort, type_int) {
 	vector<int> data{ 2, 44, 12, 18, 33, 65, 35, 87, 48, 90, 32, 29, 14, 75, 69, 19, 38, 58, 63, 0, 19, 71, 74, 44};
@@ -79,20 +78,20 @@ TEST(PyramidalSort, type_string) {
 }
 TEST(PyramidalSort, type_player) {
 	vector<Player> data{ Player("Messi", 8), Player("Neymar", 0), Player("Platini", 3), Player("Benzema", 1),
-						Player("Ronaldo(Port.)", 5), Player("Cruyff", 3) , Player("Ronaldo(Br.)", 2) , Player("Modric", 1),
-						Player("Mbappe", 2) };
+						Player("Ronaldo(Port.)", 5), Player("Cruyff", 3), Player("Ronaldo(Br.)", 2) , Player("Modric", 1),
+						Player("Mbappe", 0) };
 	cout << data;
 	stats st = pyramidal_sort(data.begin(), data.end());
 	cout << st;
 	cout << data;
 }
 
-/*
+
 TEST(QuickSort, random) {
 	vector<int> sizes{1000, 2000, 3000, 5000, 10000, 25000, 50000, 100000 };
 	vector<float> comparisons;
 	vector<float> copies;
-	for (int size: sizes) {
+	for (auto size: sizes) {
 		size_t size_comparisons = 0;
 		size_t size_copies = 0;
 		for (size_t i = 0; i < 100; i++)
@@ -141,9 +140,9 @@ TEST(QuickSort, sorted_data) {
 		cout << "copies: " << copies[i] << '\n';
 		cout << '\n';
 	}
-}*/
+}
+*/
 
-/*
 TEST(QuickSort, rev_sorted_data) {
 	vector<int> sizes{ 1000, 2000, 3000, 5000, 10000, 25000, 50000, 100000 };
 	vector<size_t> comparisons;
@@ -166,7 +165,7 @@ TEST(QuickSort, rev_sorted_data) {
 		cout << '\n';
 	}
 }
-
+/*
 TEST(PyramidalSort, random) {
 	vector<int> sizes{ 1000, 2000, 3000, 5000, 10000, 25000, 50000, 100000 };
 	vector<float> comparisons;
@@ -198,7 +197,6 @@ TEST(PyramidalSort, random) {
 		cout << '\n';
 	}
 }*/
-
 /*
 TEST(PyramidalSort, sorted_data) {
 	vector<int> sizes{ 1000, 2000, 3000, 5000, 10000, 25000, 50000, 100000 };
@@ -245,7 +243,6 @@ TEST(PyramidalSort, rev_sorted_data) {
 		cout << '\n';
 	}
 }*/
-
 /*
 TEST(BubbleSort, random) {
 	vector<int> sizes{ 1000, 2000, 3000, 5000, 10000, 25000, 50000, 100000 };
@@ -277,8 +274,8 @@ TEST(BubbleSort, random) {
 		cout << "copies: " << copies[i] << '\n';
 		cout << '\n';
 	}
-}
-
+}*/
+/*
 TEST(BubbleSort, sorted_data) {
 	vector<int> sizes{ 1000, 2000, 3000, 5000, 10000, 25000, 50000, 100000 };
 	vector<size_t> comparisons;
@@ -300,7 +297,7 @@ TEST(BubbleSort, sorted_data) {
 		cout << "copies: " << copies[i] << '\n';
 		cout << '\n';
 	}
-}
+}*/
 
 TEST(BubbleSort, rev_sorted_data) {
 	vector<int> sizes{ 1000, 2000, 3000, 5000, 10000, 25000, 50000, 100000 };
@@ -324,4 +321,3 @@ TEST(BubbleSort, rev_sorted_data) {
 		cout << '\n';
 	}
 }
-*/
